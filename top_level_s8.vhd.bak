@@ -1,0 +1,300 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity top_level_s8 is
+    port (
+        clk      : in  std_logic;
+  --      rst      : in  std_logic;
+        switch   : in  std_logic_vector(9 downto 0);
+        button   : in  std_logic_vector(2 downto 0);
+        led0     : out std_logic_vector(6 downto 0);
+        led0_dp  : out std_logic;
+        led1     : out std_logic_vector(6 downto 0);
+        led1_dp  : out std_logic;
+        led2     : out std_logic_vector(6 downto 0);
+        led2_dp  : out std_logic;
+        led3     : out std_logic_vector(6 downto 0);
+        led3_dp  : out std_logic
+        );
+end top_level_s8;
+
+architecture STR of top_level_s8 is
+
+   constant width   : positive := 8;
+
+--Internal
+    --////SyncSignals////////////////////////
+    signal    rst : std_logic;
+    signal    global_rst : std_logic;
+    --///////Selects////////////////////////
+    signal     aluSel :  std_logic_vector(3 downto 0);
+    signal     addrSel :  std_logic_vector(1 downto 0);
+    signal     bufferSpecialSel :  std_logic_vector(1 downto 0);
+    signal     bufferNumSel :  std_logic_vector(1 downto 0);
+    signal     inc_notDec :  std_logic;
+    signal     SP_h_sel, SP_l_sel :  std_logic;
+    signal     PC_h_sel, PC_l_sel :  std_logic_vector(1 downto 0);
+    signal     X_h_sel, X_l_sel :  std_logic;
+    signal     D_sel, A_sel : std_logic;
+    signal     alu_input_sel : std_logic;
+
+    --///Enables///////////////////////////////
+    signal     z_en, c_en, v_en, s_en :  std_logic;
+    signal     ALU_reg_en, A_en, D_en :  std_logic;
+    signal     IR_en            :  std_logic;
+    signal     SP_h_en, SP_l_en :  std_logic;
+    signal     PC_h_en, PC_l_en :  std_logic;
+    signal     X_h_en, X_l_en   :  std_logic;
+    signal     JMP_h_en, JMP_l_en : std_logic;
+    signal     AR_h_en, AR_l_en :  std_logic;
+    signal     external_en : std_logic;
+    signal     writeEnable :  std_logic_vector(15 downto 0);
+    signal     externalWrite: std_logic;
+    signal     RAM_write: std_logic;
+    signal     in0_en, in1_en : std_logic;
+    signal     out0_en, out1_en : std_logic;
+    
+     --///Data/////////////////////////////////////
+    signal     RAM_data : std_logic_vector(width-1 downto 0);
+    signal     RAM_q : std_logic_vector(width-1 downto 0);
+  --  signal     input0, input1 : std_logic_vector(width-1 downto 0);
+    signal     externalBus :  std_logic_vector(width-1 downto 0);
+    signal     in0_out, in1_out : std_logic_vector(width-1 downto 0);
+      
+     --///////Outputs///////////////////////////////////////////
+    signal     IR_out  :  std_logic_vector(7 downto 0);
+    signal     internalBus :  std_logic_vector(width-1 downto 0);
+    signal     c_flag  :  std_logic;
+    signal     v_flag, s_flag, z_flag :  std_logic;
+        
+    signal     addrBus :  std_logic_vector(15 downto 0);
+    signal     output0 :  std_logic_vector(width-1 downto 0);
+    signal     output1 :  std_logic_vector(width-1 downto 0);
+
+--External
+    --/////////Inputs/////////////////////////////////
+    signal     externalSel :  std_logic_vector(1 downto 0);
+ 
+    component decoder7seg
+        port (
+            input  : in  std_logic_vector(3 downto 0);
+            output : out std_logic_vector(6 downto 0));
+    end component;
+
+begin  -- STR
+	
+	rst <= button(0);
+	--input0 <= switch(7 downto 0);
+	--input1 <= switch(7 downto 0);
+    
+    --instantiate blocks
+     U_inArch: entity work.internalArch_s8
+        generic map(width => width)
+        port map(clk              => clk,
+                 rst              => global_rst,
+                 aluSel           => aluSel,
+                 alu_input_sel    => alu_input_sel,
+                 addrSel          => addrSel,
+                 bufferSpecialSel => bufferSpecialSel,
+                 bufferNumSel     => bufferNumSel,  
+                 inc_notDec       => inc_notDec,
+                 D_sel            => D_sel,
+                 A_sel            => A_sel,
+                 SP_h_sel         => SP_h_sel,
+                 SP_l_sel         => SP_l_sel,
+                 PC_h_sel         => PC_h_sel,
+                 PC_l_sel         => PC_l_sel,
+                 X_h_sel          => X_h_sel,
+                 X_l_sel          => X_l_sel,
+                 z_en             => z_en,
+                 c_en             => c_en,
+                 v_en             => v_en,
+                 s_en             => s_en,
+                 ALU_reg_en       => ALU_reg_en,
+                 A_en             => A_en,
+                 D_en             => D_en,
+                 IR_en            => IR_en,
+                 SP_h_en          => SP_h_en,
+                 SP_l_en          => SP_l_en,
+                 PC_h_en          => PC_h_en,
+                 PC_l_en          => PC_l_en,
+                 X_h_en           => X_h_en,
+                 X_l_en           => X_l_en,
+                 JMP_l_en         => JMP_l_en,
+                 JMP_h_en         => JMP_h_en,
+
+                 AR_h_en          => AR_h_en,
+                 AR_l_en          => AR_l_en,
+                 external_en      => external_en,
+                 writeEnable      => writeEnable,
+                 externalBus      => externalBus,
+                 IR_out           => IR_out,
+                 internalBus      => internalBus,
+                 c_flag           => c_flag,
+                 v_flag           => v_flag,
+                 s_flag           => s_flag,
+                 z_flag           => z_flag,
+                 addrBus          => addrBus
+               );
+
+    U_extARCH: entity work.externalArch_s8
+    port map(
+        in1  => in1_out,        -- 00 = in0
+        in0  => in0_out,        -- 01 = in1
+        RAM  => RAM_q,        -- 10 = RAM
+        internal => internalBus,  -- 11 = databus
+        connect => externalSel, 
+        -- Outputs
+        output => externalBus
+    );
+    
+    U_CTRL: entity work.ctrl_s8
+        port map(clk              => clk,
+                 rst              => rst,
+                 IR               => IR_out,
+                 c_flag           => c_flag,
+                 v_flag           => v_flag,
+                 s_flag           => s_flag,
+                 z_flag           => z_flag,
+                 global_rst       => global_rst,
+                 aluSel           => aluSel,
+                 alu_input_sel    => alu_input_sel,
+                 addrSel          => addrSel,
+                 bufferSpecialSel => bufferSpecialSel,
+                 bufferNumSel     => bufferNumSel,
+                 inc_notDec       => inc_notDec,
+                 SP_h_sel         => SP_h_sel,
+                 SP_l_sel         => SP_l_sel,
+                 PC_h_sel         => PC_h_sel,
+                 PC_l_sel         => PC_l_sel,
+                 X_h_sel          => X_h_sel,
+                 X_l_sel          => X_l_sel,
+                 D_sel            => D_sel,
+                 A_sel            => A_sel,
+              --   externalSel      => externalSel,
+                 externalWrite    => externalWrite,
+                 z_en             => z_en,
+                 c_en             => c_en,
+                 v_en             => v_en,
+                 s_en             => s_en,
+                 ALU_reg_en       => ALU_reg_en,
+                 A_en             => A_en,
+                 D_en             => D_en,
+                 IR_en            => IR_en,
+                 JMP_h_en        => JMP_h_en,
+                 JMP_l_en        => JMP_l_en,
+                 SP_h_en          => SP_h_en,
+                 SP_l_en          => SP_l_en,
+                 PC_h_en          => PC_h_en,
+                 PC_l_en          => PC_l_en,
+                 X_h_en           => X_h_en,
+                 X_l_en           => X_l_en,
+                 AR_h_en          => AR_h_en,
+                 AR_l_en          => AR_l_en,
+                 external_en      => external_en,
+                 writeEnable      => writeEnable);
+    
+    
+    U_RAM: entity work.ram
+        port map(address => addrBus(7 downto 0),
+                 clock   => clk,
+                 data    => externalBus, -- RAM_data represents connection to externalPath
+                 wren    => RAM_write,      -- set only as read for now
+                 q       => RAM_q
+    );
+    
+    
+    --////OutputRegisters//////////////////
+       U_OUT0: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => out0_en,
+          input => externalBus,
+          -- Outputs    
+          output => output0
+        );
+
+
+       U_OUT1: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en =>  '1',      --out1_en,
+          input => x"A",    ---externalBus,
+          -- Outputs    
+          output => output1
+        );
+        
+    --////InputRegisters///////////////////
+     U_IN0: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => in0_en,
+          input => (others => '0'),  --input0, -- 
+          -- Outputs    
+          output => in0_out
+        );
+
+
+       U_IN1: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => in1_en,
+          input => (others => '0'),  --TODO: set up inputs for top level
+          -- Outputs    
+          output => in1_out
+        );
+        
+      U_DEC: entity work.decoder_s8
+        port map(
+                 --inputs
+                 addrBus       => addrBus,
+                 externalWrite => externalWrite,
+                 
+                 --outputs
+                 externalSel   => externalSel,
+                 out0_en       => out0_en,
+                 out1_en       => out1_en,
+                 in1_en        => in1_en,
+                 in0_en        => in0_en,
+                 RAM_write     => RAM_write);
+    
+
+    --//////outputPorts//////////////////////////////
+    U_LED3 : decoder7seg port map (
+        input  => output1(7 downto 4),
+        output => led3
+        );
+
+    U_LED2 : decoder7seg port map (
+        input  => output1(3 downto 0),
+        output => led2
+        );
+
+    U_LED1 : decoder7seg port map (
+        input  => output0(7 downto 4),
+        output => led1
+        );
+
+    U_LED0 : decoder7seg port map (
+        input  => output0(3 downto 0),
+        output => led0
+        );
+
+    led3_dp <= '1';
+    led2_dp <= '1';
+    led1_dp <= '1';
+    led0_dp <= '1';
+
+end STR;

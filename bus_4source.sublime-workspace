@@ -1,0 +1,560 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"c_",
+				"c_temp"
+			],
+			[
+				"en",
+				"entity"
+			],
+			[
+				"z_",
+				"z_temp"
+			],
+			[
+				"c",
+				"c_flag"
+			],
+			[
+				"out",
+				"outputReg"
+			],
+			[
+				"data",
+				"dataBus"
+			],
+			[
+				"width",
+				"WIDTH-1"
+			],
+			[
+				"esl",
+				"elsif	elsif"
+			],
+			[
+				"C",
+				"cin"
+			],
+			[
+				"st",
+				"std_logic"
+			],
+			[
+				"d",
+				"d_us"
+			],
+			[
+				"inpu",
+				"input1"
+			],
+			[
+				"in",
+				"input1_us"
+			],
+			[
+				"inp",
+				"input2"
+			],
+			[
+				"ou",
+				"output_us"
+			],
+			[
+				"n",
+				"negative"
+			],
+			[
+				"che",
+				"check2"
+			],
+			[
+				"check",
+				"check1"
+			],
+			[
+				"within",
+				"withinCheck"
+			],
+			[
+				"sq",
+				"sqrtLength"
+			],
+			[
+				"l",
+				"length"
+			],
+			[
+				"co",
+				"colorb"
+			],
+			[
+				"v",
+				"ver_Sync"
+			],
+			[
+				"h",
+				"horiz_Sync"
+			],
+			[
+				"H",
+				"HSYNC_BEGIN"
+			],
+			[
+				"HS",
+				"HSYNC_END"
+			],
+			[
+				"hori",
+				"horiz_Sync"
+			],
+			[
+				"clk",
+				"clk2"
+			],
+			[
+				"el",
+				"elsif	elsif"
+			],
+			[
+				"monk",
+				"monkey_trouble"
+			],
+			[
+				"fir",
+				"first_last6"
+			],
+			[
+				"same",
+				"same_first_last"
+			],
+			[
+				"re",
+				"return"
+			],
+			[
+				"se",
+				"sleep_in"
+			],
+			[
+				"a",
+				"ascendingCount"
+			],
+			[
+				"input",
+				"inputArray"
+			],
+			[
+				"but",
+				"button"
+			],
+			[
+				"x",
+				"x_en"
+			],
+			[
+				"s",
+				"std_logic"
+			],
+			[
+				"y",
+				"reg_y_out"
+			],
+			[
+				"ne",
+				"next_state"
+			],
+			[
+				"sta",
+				"state_0"
+			],
+			[
+				"y_",
+				"y_en"
+			],
+			[
+				"stat",
+				"state_0"
+			],
+			[
+				"tem",
+				"tempX"
+			],
+			[
+				"wid",
+				"WIDTH-1"
+			],
+			[
+				"temp",
+				"tempX"
+			],
+			[
+				"sub",
+				"sub2_out"
+			],
+			[
+				"SUb",
+				"Subtractor"
+			],
+			[
+				"r",
+				"reg_y_out"
+			],
+			[
+				"reg",
+				"reg_x_out"
+			],
+			[
+				"COM",
+				"comparator"
+			],
+			[
+				"comp",
+				"component"
+			],
+			[
+				"inpt",
+				"input1"
+			],
+			[
+				"wi",
+				"width"
+			],
+			[
+				"x_",
+				"x_lessThan_y"
+			],
+			[
+				"i",
+				"ieee"
+			],
+			[
+				"pro",
+				"process"
+			],
+			[
+				"tm",
+				"tempY"
+			],
+			[
+				"tmep",
+				"tempX"
+			],
+			[
+				"tE",
+				"tempY"
+			],
+			[
+				"ent",
+				"entity"
+			],
+			[
+				"cl",
+				"clk_out"
+			],
+			[
+				"bu",
+				"button_n"
+			],
+			[
+				"numb",
+				"numberOfProcessors"
+			],
+			[
+				"sum",
+				"sumConstant"
+			],
+			[
+				"lo",
+				"lowerBound"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/s8_final/small8/alu_s8.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/s8_final/small8/alu_s8_tb.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/s8_final/small8/regWidth_s8.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/s8_final/small8_notes.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/s8_final/small8/bus_4source.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/s8_final/small8/internalArch_s8.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/s8_final/small8/tristate.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd/gcd_tb.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab2/L2_ALU_Arithmetic_3/alu_sla.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab6/vga/vga_logic.vhd",
+		"/Users/hmiles23/Google Drive/Programming/Python/codingBat.py",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/final/small8_notes.vhd",
+		"/Users/hmiles23/Google Drive/Programming/Python/testScript.py",
+		"/Users/hmiles23/Google Drive/Programming/Python/encodedMessage.py",
+		"/Users/hmiles23/Google Drive/Programming/Python/skeli.py",
+		"/Users/hmiles23/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/802A6099-30D8-4A3A-979F-E180AFA8A7AE/Alex Dukes Lab 5 quiz.asm",
+		"/Users/hmiles23/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/CF2A4ECF-6459-42DD-BB1E-3D5B217062EB/Quiz 5.asm",
+		"/Users/hmiles23/Google Drive/Programming/Java/OfferActivity.java",
+		"/Users/hmiles23/Desktop/MessagingActivity.java",
+		"/Users/hmiles23/Desktop/SinchService.java",
+		"/Users/hmiles23/Downloads/sinch-android-rtc-3.5.0/samples/sinch-rtc-sample-messaging/AndroidManifest.xml",
+		"/Users/hmiles23/Google Drive/Programming/Java/RideBoard/RideBoard/app/src/main/res/values/strings.xml",
+		"/Users/hmiles23/Google Drive/Programming/Java/RideBoard/RideBoard/app/src/main/java/com/android/rideboard/RideBoardApplication.java",
+		"/Users/hmiles23/Google Drive/Programming/Java/RideBoard/RideBoard/RideBoard/PullToRefreshListView.java",
+		"/Users/hmiles23/Downloads/Ohmmeter_HAM.c",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd/gcd.vhd",
+		"/Users/hmiles23/Desktop/top_level.vhd",
+		"/Users/hmiles23/Desktop/addr_logic.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab6/vga/top_level.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd/ctrl1.vhd",
+		"/Users/hmiles23/OneDrive/EEL4744c/Labs/Lab5/ProgramCode/Lab5c_HAM/Lab5c_HAM/Lab5c_HAM.c",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab6/vga/pixel_clk_gen_tb.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab6/vga/blk_row_addr.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab6/vga/blk_col_addr.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab6/vga/vga_gen_sync.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab6/vga/vga_lib.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/clk_gen/clk_gen.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/clk_gen/clk_div.vhd",
+		"/Users/hmiles23/OneDrive/EEL4744c/Labs/Lab4/ProgramCode/Lab4b_HAM/Lab4b_HAM/Lab4b_HAM.asm",
+		"/Users/hmiles23/OneDrive/EEL4744c/Labs/Lab4/ProgramCode/Lab4a_HAM_PLAY.asm",
+		"/Users/hmiles23/Downloads/lab4b_BAL.asm",
+		"/Users/hmiles23/Desktop/OfferActivity.java",
+		"/Users/hmiles23/Google Drive/Programming/Java/RideBoard/RideBoard/app/src/main/java/com/android/rideboard/ProfileActivity.java",
+		"/Users/hmiles23/Google Drive/Programming/Java/codeBits.java",
+		"/Users/hmiles23/Downloads/Swipe_refresh_Material/app/src/main/java/dcodepages/swipe_refresh_list_material/Refresh_List_Fragment.java",
+		"/Users/hmiles23/Downloads/Swipe_refresh_Material/app/src/main/java/dcodepages/swipe_refresh_list_material/MainActivity.java",
+		"/Users/hmiles23/Google Drive/Programming/Java/RideBoard/build.gradle",
+		"/Users/hmiles23/Google Drive/Programming/C++/Practice/untitled folder/ELIS.cpp",
+		"/Users/hmiles23/Google Drive/Programming/Python/HackerRank/ELIS.py",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab2/L2_ALU_Numeric_2/alu_ns_tb.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab6/vga/vga_tb.vhd",
+		"/Users/hmiles23/Google Drive/Programming/iOS/kickSwap/kickSwap/AppDelegate.m",
+		"/Users/hmiles23/Google Drive/Programming/C++/Practice/HackerRank/lonelyInt.cpp",
+		"/Users/hmiles23/Google Drive/Programming/Websites/hamtec.github.io/index.html",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd/Turnin/ctrl1.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd/top_level.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd/mux_2x1.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd/subtractor.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd/datapath2.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd/ctrl2.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/Files/ex_ctrl.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd/datapath.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/Files/gcd_tb.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd_tb.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/top_level/counter.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/ex_datapath.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/gcd.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/Turnin/gray1.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/reg.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab5/mux_2x1.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/LectureCode/monteCarlo_H1.c",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/top_level/gray1.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/top_level/top_level.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/top_level/quiz4_counter.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/top_level/quiz4_topLevel.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/top_level/gray2.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/top_level/clk_gen.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/top_level/clk_div.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/LectureCode/clk_div.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/Labs/Lab4/top_level/counter_tb.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/LectureCode/counter_4bit.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/LectureCode/clk_gen_tb.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/LectureCode/clk_gen.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/LectureCode/FSM.vhd",
+		"/Users/hmiles23/OneDrive/EEL4712c/LectureCode/gray1.vhd",
+		"/Users/hmiles23/Documents/Project1/src/Server.java",
+		"/Users/hmiles23/Documents/Project1/src/Client.java",
+		"/Volumes/MY PASSPORT/Users/PSD/Documents/CNT4007/ase/src/Server.java",
+		"/Users/hmiles23/Documents/workspace/Project 2/Client.java",
+		"/Volumes/MY PASSPORT/Users/PSD/Documents/workspace/Project1/src/Client.java",
+		"/Volumes/MY PASSPORT/Users/PSD/Documents/workspace/Project1/src/Server.java"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"a_us",
+			"cout",
+			"input2",
+			"input1",
+			"reg",
+			"vga_gen_sync",
+			"clk_div",
+			"period"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"output_us",
+			"c_flag",
+			"d",
+			"a",
+			"blk_col_addr",
+			"blk_row_addr",
+			"blk_col_addr",
+			"pixel_clk_gen"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 27.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "bus_4source.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

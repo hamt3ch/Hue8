@@ -1,0 +1,512 @@
+library ieee;
+   use ieee.std_logic_1164.all;
+   use ieee.numeric_std.all;
+
+   entity internalArch_s8 is   
+    generic(width : positive := 8);
+    port (
+-- Inputs:
+        --////SyncSignals////////////////////////
+        clk, rst : in std_logic;
+        --///////Selects////////////////////////
+        aluSel : in std_logic_vector(3 downto 0);
+        alu_input_sel : in std_logic;
+        addrSel : in std_logic_vector(1 downto 0);
+        bufferSpecialSel : in std_logic_vector(1 downto 0);
+        bufferNumSel : in std_logic_vector(1 downto 0);
+        inc_notDec : in std_logic;
+        SP_h_sel, SP_l_sel : in std_logic;
+        PC_h_sel, PC_l_sel : in std_logic_vector(1 downto 0);
+        X_h_sel, X_l_sel : in std_logic;
+        D_sel,A_sel: in std_logic;
+
+        --///Enables///////////////////////////////
+        z_en, c_en, v_en, s_en : in std_logic;
+        ALU_reg_en, A_en, D_en : in std_logic;
+        IR_en            : in std_logic;
+        SP_h_en, SP_l_en : in std_logic;
+        PC_h_en, PC_l_en : in std_logic;
+        X_h_en, X_l_en   : in std_logic;
+        AR_h_en, AR_l_en : in std_logic;
+        JMP_h_en, JMP_l_en : in std_logic;
+        external_en : in std_logic;
+        writeEnable : in std_logic_vector(15 downto 0);
+        
+        --///Data/////////////////////////////////////
+        externalBus : in std_logic_vector(width-1 downto 0);
+      
+-- Outputs
+        IR_out  : buffer std_logic_vector(width-1 downto 0);
+        internalBus : buffer std_logic_vector(width-1 downto 0);
+        c_flag  : buffer std_logic;
+        v_flag, s_flag, z_flag : out std_logic;
+        
+        addrBus : out std_logic_vector(15 downto 0)
+
+     );
+    end internalArch_s8;
+
+architecture STR of internalArch_s8 is
+
+--//////////intermediateStatusReg///////////////////
+signal c_temp, v_temp, z_temp,s_temp : std_logic;
+
+--///////registerOutputs///////////////////////////
+signal AR_h_out, AR_l_out : std_logic_vector(width-1 downto 0);
+signal D_out   : std_logic_vector(width-1 downto 0);
+signal A_out   : std_logic_vector(width-1 downto 0);
+signal ALU_temp :  std_logic_vector(width-1 downto 0);
+signal external_temp: std_logic_vector(width-1 downto 0);
+signal ALU_out : std_logic_vector(width-1 downto 0);
+signal SP_h_out  : std_logic_vector(width-1 downto 0);
+signal SP_l_out  : std_logic_vector(width-1 downto 0);
+signal PC_h_out  : std_logic_vector(width-1 downto 0);
+signal PC_l_out  : std_logic_vector(width-1 downto 0);
+signal X_h_out  : std_logic_vector(width-1 downto 0);
+signal X_l_out  : std_logic_vector(width-1 downto 0);
+signal JMP_H_out : std_logic_vector(width-1 downto 0);
+signal JMP_L_out : std_logic_vector(width-1 downto 0);
+signal buffer_h_out : std_logic_vector(width-1 downto 0);
+signal buffer_l_out : std_logic_vector(width-1 downto 0);
+
+--///////SpecialRegisterTemps/////////////////////////////
+signal X_h_mux_temp, SP_h_mux_temp, PC_h_mux_temp  : std_logic_vector(width-1 downto 0); 
+signal X_l_mux_temp, SP_l_mux_temp,  PC_l_mux_temp  : std_logic_vector(width-1 downto 0);
+signal D_mux_temp, A_mux_temp,ALU_mux_temp : std_logic_vector(width-1 downto 0);
+signal buffer_temp, num_temp : std_logic_vector(15 downto 0);
+signal inc_dec_temp : std_logic_vector(15 downto 0);
+signal AR,SP,X,PC : std_logic_vector(15 downto 0);
+
+signal z_enter,s_enter : std_logic;
+
+begin
+
+--///ArithmeticLogicUnit///////////////////
+   U_ALU: entity work.alu_s8
+        generic map(width => width)
+        port map (
+        -- Inputs
+        a  =>  a_out,   
+        d  =>  ALU_mux_temp,  
+        cin => c_flag, 
+        sel => ALUsel,
+        -- Outputs
+        c_flag => c_temp, 
+        v_flag => v_temp, 
+        z_flag => z_temp, 
+        s_flag => s_temp,
+        output => ALU_temp
+        );
+    
+    ALU_MUX: entity work.mux2x1
+    	generic map(width => width)
+    	port map(in_0   => internalBus,
+    		     in_1   => D_out,
+    		     sel    => ALU_input_sel,
+    		     output => ALU_mux_temp);
+
+--///internalBusConnect////////////////////////
+    U_BUS: entity work.bus_16source
+        generic map(width => width)
+        port map(
+          -- Inputs
+          input0 => A_out,
+          input1 => D_out,
+          input2 => ALU_out,
+          input3 => PC_h_out,
+          
+          input4 => PC_l_out,
+          input5 => SP_h_out,
+          input6 => SP_l_out,
+          input7 => X_h_out,
+          
+          input8 => X_l_out,
+          input9 => buffer_h_out,
+          inputA => buffer_l_out,
+          inputB => external_temp,
+          inputC => (others => '0'),
+          inputD => (others => '0'),
+          inputE => (others => '0'),
+          inputF => (others => '0'),
+
+          wen => writeEnable,
+
+          -- Outputs
+          output => internalBus
+          );
+  
+   --/////StatusRegs/////////////////////////////
+    C_FLG: entity work.reg_s8
+        port map(
+            -- Inputs
+          clk => clk,
+          rst => rst,
+          en => c_en,
+          input => c_temp,
+          -- Outputs    
+          output => c_flag
+          );
+
+    V_FLG: entity work.reg_s8
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => v_en,
+          input => v_temp,
+          -- Outputs    
+          output => v_flag
+          );
+
+    Z_FLG: entity work.reg_s8
+        port map(
+            -- Inputs
+          clk => clk,
+          rst => rst,
+          en => z_en,
+          input => z_enter,
+          -- Outputs    
+          output => z_flag
+          );
+          
+         z_enter <= '1' when (a_out = (others => '0') or z_temp = '1');
+
+    S_FLG: entity work.reg_s8
+        port map(
+            -- Inputs
+          clk => clk,
+          rst => rst,
+          en => s_en,
+          input => s_enter,
+          -- Outputs    
+          output => s_flag
+
+          );
+          s_enter <= '1' when (a_out(7) = '1' or s_temp = '1');
+         
+          
+
+  --////////InternalRegs///////////////////////
+   ALU_r: entity work.reg
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => ALU_reg_en,
+          input => ALU_temp,
+          -- Outputs    
+          output => ALU_out
+          
+        );
+
+    IR: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => IR_en,
+          input => internalBus,
+          -- Outputs    
+          output => IR_out
+        );
+
+    A:  entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => A_en,
+          input => A_mux_temp,
+          -- Outputs    
+          output => A_out
+        );
+        
+   
+        
+     A_MUX: entity work.mux2x1
+     	generic map(width => width)
+     	port map(in_0   => internalBus,
+     		     in_1   => D_out,
+     		     sel    => A_sel,
+     		     output => A_mux_temp);
+
+     D: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => D_en,
+          input => D_mux_temp,
+          -- Outputs    
+          output => D_out
+        );
+        
+     D_MUX: entity work.mux2x1
+     	generic map(width => width)
+     	port map(in_0   => internalBus,
+     		     in_1   => A_out,
+     		     sel    => D_sel,
+     		     output => D_mux_temp);
+
+--/////////AddrRegs////////////////////////////
+     --xIndexPointerUnit
+     X_h: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => X_h_en,
+          input => X_h_mux_temp,
+          -- Outputs    
+          output => X_h_out
+        );
+
+      X_muxHi: entity work.mux2x1
+        generic map(width => width)
+        port map (
+          --Inputs
+            in_0 => internalBus,
+            in_1 => inc_dec_temp(15 downto 8),
+            sel => X_h_sel,
+          --Outputs
+            output => X_h_mux_temp
+          );
+
+     X_l: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => X_l_en,
+          input => X_l_mux_temp,
+          -- Outputs    
+          output => X_l_out
+        );
+
+
+      X_muxLo: entity work.mux2x1
+        generic map(width => width)
+        port map (
+          --Inputs
+            in_0 => internalBus,
+            in_1 => inc_dec_temp(7 downto 0),
+            sel => X_l_sel,
+          --Outputs
+            output => X_l_mux_temp
+          );
+
+        X <= X_h_out&X_l_out;
+
+      --StackPointerUnit  
+      SP_h: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => SP_h_en,
+          input => SP_h_mux_temp,
+          -- Outputs    
+          output => SP_h_out
+        );
+
+     SP_muxHi: entity work.mux2x1
+        generic map(width => width)
+        port map (
+          --Inputs
+            in_0 => internalBus,
+            in_1 => inc_dec_temp(15 downto 8),
+            sel => SP_h_sel,
+          --Outputs
+            output => SP_h_mux_temp
+          );
+
+     
+     SP_l: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => SP_l_en,
+          input => SP_l_mux_temp,
+          -- Outputs    
+          output => SP_l_out
+        );
+
+      SP_muxLo: entity work.mux2x1
+        generic map(width => width)
+        port map (
+          --Inputs
+            in_0 => internalBus,
+            in_1 => inc_dec_temp(7 downto 0),
+            sel => SP_l_sel,
+          --Outputs
+            output => SP_l_mux_temp
+          );
+
+        SP <= SP_h_out&SP_l_out;
+
+    --ProgramCounterUnit
+    PC_h: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => PC_h_en,
+          input => PC_h_mux_temp,
+          -- Outputs    
+          output => PC_h_out
+        );
+        
+     PC_l: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => PC_l_en,
+          input => PC_l_mux_temp,
+          -- Outputs    
+          output => PC_l_out
+        );
+        
+       PC_muxHi: entity work.mux4x1
+        generic map(width => width)
+        port map (
+          --Inputs
+            in_0 => internalBus,
+            in_1 => inc_dec_temp(15 downto 8),
+            in_2 => JMP_h_out,
+            in_3 => x"01", 
+            sel => PC_h_sel,
+          --Outputs
+            output => PC_h_mux_temp
+          );
+      
+
+      PC_muxLo: entity work.mux4x1
+        generic map(width => width)
+        port map (
+          --Inputs
+            in_0 => internalBus,
+            in_1 => inc_dec_temp(7 downto 0),
+            in_2 => JMP_l_out,
+            in_3 => x"01", 
+            sel => PC_l_sel,
+          --Outputs
+            output => PC_l_mux_temp
+          );
+
+        PC <= PC_h_out&PC_l_out;
+
+
+    AR_h: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => AR_h_en,
+          input => internalBus,
+          -- Outputs    
+          output => AR_h_out
+        );
+        
+     AR_l: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => AR_l_en,
+          input => internalBus,
+          -- Outputs    
+          output => AR_l_out
+        );
+
+        AR <= AR_h_out&AR_l_out;
+
+      ADDR_MUX: entity work.mux4x1
+        generic map(width => 16)
+        port map(
+          in_0 => AR,
+          in_1 => PC,
+          in_2 => X,
+          in_3 => SP,
+          sel => addrSel,
+          output => addrBus
+          );
+
+    --///bufferUnit///////////////////////////   
+       BUF_MUX: entity work.mux4x1
+        generic map(width => 16)
+        port map(
+          in_0 => x"55AA", -- Error Warning
+          in_1 => PC,
+          in_2 => X,
+          in_3 => SP,
+          sel => bufferSpecialSel,          
+          output => buffer_temp
+          );
+
+       NUM_MUX: entity work.mux4x1
+        generic map(width => 16)
+        port map(
+          in_0 => x"0000",
+          in_1 => x"0001",
+          in_2 => x"0002",
+          in_3 => x"0003",
+          sel => bufferNumSel,
+          output => num_temp
+          );
+
+        INC_DEC: entity work.inc_decBlk
+         port map(
+          input1 => buffer_temp,
+          input2 => num_temp,
+          add => inc_notDec,
+          output => inc_dec_temp
+          );
+
+--/////JumpReg////////////////////////
+		JUMP_H: entity work.regWidth_s8
+			generic map(width => width)
+			port map(clk    => clk,
+				     rst    => rst,
+				     en     => jmp_h_en,
+				     input  => internalBus,
+				     output => jmp_h_out
+				     
+				     );
+				     
+		JUMP_L: entity work.regWidth_s8
+			generic map(width => width)
+			port map(clk    => clk,
+				     rst    => rst,
+				     en     => jmp_l_en,
+				     input  => internalBus,
+				     output => jmp_l_out);
+				     
+
+---////ExternalConnect///////////////
+       EXT: entity work.regWidth_s8
+        generic map(width => width)
+        port map(
+          -- Inputs
+          clk => clk,
+          rst => rst,
+          en => external_en,
+          input => externalBus,
+          -- Outputs    
+          output => external_temp
+        );
+
+end STR; -- STR

@@ -1,0 +1,55 @@
+Depth = 256;
+Width = 8;
+Address_radix = hex;
+Data_radix = hex;
+% Program RAM Data %
+Content
+  Begin
+0000 : 84; 	#	 LDAA $0A               A = 0
+0001 : 0A;
+0002 : F6; # 	 STAA $00FF (Count)     M
+0003 : FF; 
+0004 : 00; 
+0005 : 8A;  #	 LDXI $0022 (Buffer)
+0006 : 22;
+0007 : 00; 
+0008 : 84;  #	 LDAI $00
+0009 : 00; 
+000A : F1;  #	 MOV A->D
+000B : F9;  	 CLRC
+000C : BC; Loop: LDAA X				A = Mem[0022]
+000D : 01; 		 ADCR
+000E : F1;		 MOV A->D 
+000F : 88;		 LDAA $00FF (Count)
+0010 : FF;
+0011 : 00;		 	 
+0012 : FB; 		 DECA
+0013 : F6;		 STAA $00FF (Count)
+0014 : FF; 		
+0015 : 00;
+0016 : FC;       INCX 
+0017 : B4;       BNEA  Loop
+0018 : 0C;	
+0019 : 00;
+001A : F2;       MOV D->A
+001B : F6;       STAA OUTPUT0
+001C : FE;
+001D : FF;
+001E : F9;     Fin:	CLRC
+001F : B0;		BCCA Fin
+0020 : 1E; 
+0021 : 00; 
+0022 : 01; Buffer:
+0023 : 02;
+0024 : 03;
+0025 : 04;
+0026 : 05;
+0027 : 06;
+0028 : 07;
+0029 : 08;
+002A : 09;
+002B : 0A;
+
+
+[0032..00FF] : 00;
+End;

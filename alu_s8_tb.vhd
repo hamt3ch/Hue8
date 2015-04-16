@@ -1,0 +1,67 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity alu_s8_tb is
+end alu_s8_tb;
+
+architecture TB of alu_s8_tb is
+
+    constant width   : positive := 8;
+    signal clk    : std_logic   := '0';
+    signal rst    : std_logic   := '1';
+    signal a, d   : std_logic_vector(width-1 downto 0);
+    signal sel    : std_logic_vector(3 downto 0);
+    signal cin    : std_logic;
+    signal c_temp, v_temp, z_temp, s_temp : std_logic;
+    signal c_en , v_en, z_en, s_en :  std_logic;
+    signal output : std_logic_vector(width-1 downto 0);
+
+begin
+    U_ALU: entity work.alu_s8
+        generic map(width => width)
+        port map (
+        -- Inputs
+        a  =>  a,   
+        d  =>  d,  
+        cin => cin, 
+        sel => sel,
+
+        -- Outputs
+        c_flag => c_temp, 
+        v_flag => v_temp, 
+        z_flag => z_temp, 
+        s_flag => s_temp,
+        output => output
+        );
+
+    clk <= not clk after 20 ns;
+    process
+    begin -- start TestBench
+
+    for g in 0 to 14 loop
+
+        sel <= std_logic_vector(to_unsigned(g,4));
+        
+        for i in 0 to 2**width-1 loop
+
+            a <= std_logic_vector(to_unsigned(i, WIDTH));
+
+            for j in 0 to 2**width-1 loop
+
+                 d <= std_logic_vector(to_unsigned(j, WIDTH));
+                 
+                 cin <= '0' after 20 ns;
+
+                wait until clk'event and clk = '1';
+            end loop;
+        end loop;
+    end loop;
+
+    report "Fin" severity note;
+
+    wait;
+
+    end process;
+
+end TB;
