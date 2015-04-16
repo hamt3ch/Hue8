@@ -2,172 +2,64 @@
 TimeQuest Timing Analyzer Summary
 ------------------------------------------------------------
 
-Type  : Slow 1200mV 85C Model Setup 'ctrl_s8:U_CTRL|state.ADCR0'
-Slack : -8.457
-TNS   : -53.821
-
 Type  : Slow 1200mV 85C Model Setup 'clk'
-Slack : -8.244
-TNS   : -969.380
-
-Type  : Slow 1200mV 85C Model Setup 'ctrl_s8:U_CTRL|state.ADCR1'
-Slack : -0.836
-TNS   : -2.197
-
-Type  : Slow 1200mV 85C Model Setup 'ctrl_s8:U_CTRL|state.Call7'
-Slack : -0.746
-TNS   : -2.293
-
-Type  : Slow 1200mV 85C Model Hold 'ctrl_s8:U_CTRL|state.ADCR1'
-Slack : -3.407
-TNS   : -17.361
-
-Type  : Slow 1200mV 85C Model Hold 'ctrl_s8:U_CTRL|state.Call7'
-Slack : -3.232
-TNS   : -9.956
-
-Type  : Slow 1200mV 85C Model Hold 'ctrl_s8:U_CTRL|state.ADCR0'
-Slack : -1.972
-TNS   : -13.960
+Slack : -7.138
+TNS   : -893.239
 
 Type  : Slow 1200mV 85C Model Hold 'clk'
-Slack : 0.105
+Slack : 0.338
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Recovery 'clk'
-Slack : -1.699
-TNS   : -134.214
+Slack : -1.103
+TNS   : -113.209
 
 Type  : Slow 1200mV 85C Model Removal 'clk'
-Slack : 0.876
+Slack : 0.866
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clk'
 Slack : -3.000
-TNS   : -254.522
-
-Type  : Slow 1200mV 85C Model Minimum Pulse Width 'ctrl_s8:U_CTRL|state.ADCR0'
-Slack : -0.521
-TNS   : -13.496
-
-Type  : Slow 1200mV 85C Model Minimum Pulse Width 'ctrl_s8:U_CTRL|state.Call7'
-Slack : 0.372
-TNS   : 0.000
-
-Type  : Slow 1200mV 85C Model Minimum Pulse Width 'ctrl_s8:U_CTRL|state.ADCR1'
-Slack : 0.418
-TNS   : 0.000
-
-Type  : Slow 1200mV 0C Model Setup 'ctrl_s8:U_CTRL|state.ADCR0'
-Slack : -7.599
-TNS   : -47.752
+TNS   : -269.522
 
 Type  : Slow 1200mV 0C Model Setup 'clk'
-Slack : -7.244
-TNS   : -841.359
-
-Type  : Slow 1200mV 0C Model Setup 'ctrl_s8:U_CTRL|state.ADCR1'
-Slack : -0.809
-TNS   : -2.508
-
-Type  : Slow 1200mV 0C Model Setup 'ctrl_s8:U_CTRL|state.Call7'
-Slack : -0.737
-TNS   : -2.484
-
-Type  : Slow 1200mV 0C Model Hold 'ctrl_s8:U_CTRL|state.ADCR1'
-Slack : -3.021
-TNS   : -11.201
-
-Type  : Slow 1200mV 0C Model Hold 'ctrl_s8:U_CTRL|state.Call7'
-Slack : -2.837
-TNS   : -8.072
-
-Type  : Slow 1200mV 0C Model Hold 'ctrl_s8:U_CTRL|state.ADCR0'
-Slack : -1.745
-TNS   : -12.115
+Slack : -6.308
+TNS   : -777.894
 
 Type  : Slow 1200mV 0C Model Hold 'clk'
-Slack : 0.101
+Slack : 0.292
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Recovery 'clk'
-Slack : -1.463
-TNS   : -110.286
+Slack : -0.878
+TNS   : -88.490
 
 Type  : Slow 1200mV 0C Model Removal 'clk'
-Slack : 0.780
+Slack : 0.769
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clk'
 Slack : -3.000
-TNS   : -254.522
-
-Type  : Slow 1200mV 0C Model Minimum Pulse Width 'ctrl_s8:U_CTRL|state.ADCR0'
-Slack : -0.361
-TNS   : -11.056
-
-Type  : Slow 1200mV 0C Model Minimum Pulse Width 'ctrl_s8:U_CTRL|state.ADCR1'
-Slack : 0.431
-TNS   : 0.000
-
-Type  : Slow 1200mV 0C Model Minimum Pulse Width 'ctrl_s8:U_CTRL|state.Call7'
-Slack : 0.452
-TNS   : 0.000
+TNS   : -269.522
 
 Type  : Fast 1200mV 0C Model Setup 'clk'
-Slack : -4.580
-TNS   : -501.758
-
-Type  : Fast 1200mV 0C Model Setup 'ctrl_s8:U_CTRL|state.ADCR0'
-Slack : -4.472
-TNS   : -27.470
-
-Type  : Fast 1200mV 0C Model Setup 'ctrl_s8:U_CTRL|state.ADCR1'
-Slack : -0.263
-TNS   : -0.388
-
-Type  : Fast 1200mV 0C Model Setup 'ctrl_s8:U_CTRL|state.Call7'
-Slack : -0.185
-TNS   : -0.373
-
-Type  : Fast 1200mV 0C Model Hold 'ctrl_s8:U_CTRL|state.ADCR1'
-Slack : -2.035
-TNS   : -6.303
-
-Type  : Fast 1200mV 0C Model Hold 'ctrl_s8:U_CTRL|state.Call7'
-Slack : -1.974
-TNS   : -5.493
-
-Type  : Fast 1200mV 0C Model Hold 'ctrl_s8:U_CTRL|state.ADCR0'
-Slack : -1.367
-TNS   : -10.047
+Slack : -3.620
+TNS   : -416.365
 
 Type  : Fast 1200mV 0C Model Hold 'clk'
-Slack : -0.021
-TNS   : -0.021
+Slack : 0.168
+TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Recovery 'clk'
-Slack : -0.633
-TNS   : -31.719
+Slack : -0.236
+TNS   : -15.987
 
 Type  : Fast 1200mV 0C Model Removal 'clk'
-Slack : 0.481
+Slack : 0.477
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clk'
 Slack : -3.000
-TNS   : -262.079
-
-Type  : Fast 1200mV 0C Model Minimum Pulse Width 'ctrl_s8:U_CTRL|state.ADCR0'
-Slack : -0.278
-TNS   : -4.968
-
-Type  : Fast 1200mV 0C Model Minimum Pulse Width 'ctrl_s8:U_CTRL|state.Call7'
-Slack : 0.304
-TNS   : 0.000
-
-Type  : Fast 1200mV 0C Model Minimum Pulse Width 'ctrl_s8:U_CTRL|state.ADCR1'
-Slack : 0.404
-TNS   : 0.000
+TNS   : -280.844
 
 ------------------------------------------------------------

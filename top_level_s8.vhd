@@ -13,7 +13,8 @@ entity top_level_s8 is
 		led2    : out std_logic_vector(6 downto 0);
 		led2_dp : out std_logic;
 		led3    : out std_logic_vector(6 downto 0);
-		led3_dp : out std_logic
+		led3_dp : out std_logic;
+		green_leds : out std_logic_vector(9 downto 0)
 	);
 end top_level_s8;
 
@@ -22,6 +23,7 @@ architecture STR of top_level_s8 is
 
 	--Internal
 	--////SyncSignals////////////////////////
+	signal go 				: std_logic;
 	signal rst                : std_logic;
 	signal global_rst         : std_logic;
 	--///////Selects////////////////////////
@@ -51,6 +53,7 @@ architecture STR of top_level_s8 is
 	signal RAM_write              : std_logic;
 	signal in0_en, in1_en         : std_logic;
 	signal out0_en, out1_en       : std_logic;
+	
 
 	--///Data/////////////////////////////////////
 	signal RAM_data         : std_logic_vector(width - 1 downto 0);
@@ -66,6 +69,7 @@ architecture STR of top_level_s8 is
 	signal v_flag, s_flag, z_flag : std_logic;
 
 	signal addrBus : std_logic_vector(15 downto 0);
+	signal input0, input1 : std_logic_vector(width - 1 downto 0);
 	signal output0 : std_logic_vector(width - 1 downto 0);
 	signal output1 : std_logic_vector(width - 1 downto 0);
 
@@ -82,8 +86,11 @@ architecture STR of top_level_s8 is
 begin                                   -- STR
 
 	rst <= not button(0);
-	--input0 <= switch(7 downto 0);
-	--input1 <= switch(7 downto 0);
+	go <= not button(1);
+	green_leds(3 downto 0) <= input0(3 downto 0);
+	green_leds(7 downto 4) <= input1(3 downto 0);
+	green_leds(8) <= switch(8);
+	green_leds(9) <= switch(9);
 
 	--instantiate blocks
 	U_inArch : entity work.internalArch_s8
@@ -148,6 +155,7 @@ begin                                   -- STR
 	U_CTRL : entity work.ctrl_s8
 		port map(clk              => clk,
 			     rst              => rst,
+			     go    			 => go,
 			     IR               => IR_out,
 			     c_flag           => c_flag,
 			     v_flag           => v_flag,
@@ -223,6 +231,22 @@ begin                                   -- STR
 			-- Outputs    
 			output => output1
 		);
+		
+	MY_LD1: entity work.regWidth_s8
+		generic map(width => width)
+		port map(clk    => clk,
+			     rst    => rst,
+			     en     => switch(9),
+			     input  => switch(7 downto 0),
+			     output => input1);
+			     
+	MY_LD0: entity work.regWidth_s8
+		generic map(width => width)
+		port map(clk    => clk,
+			     rst    => rst,
+			     en     => switch(8),
+			     input  => switch(7 downto 0),
+			     output => input0);
 
 	--////InputRegisters///////////////////
 	U_IN0 : entity work.regWidth_s8
@@ -232,7 +256,7 @@ begin                                   -- STR
 			clk    => clk,
 			rst    => rst,
 			en     => in0_en,
-			input  => (others => '0'),  --input0, -- 
+			input  => input0,  --input0, -- 
 			-- Outputs    
 			output => in0_out
 		);
@@ -244,7 +268,7 @@ begin                                   -- STR
 			clk    => clk,
 			rst    => rst,
 			en     => in1_en,
-			input  => (others => '0'),  --TODO: set up inputs for top level
+			input  => input1,  --TODO: set up inputs for top level
 			-- Outputs    
 			output => in1_out
 		);

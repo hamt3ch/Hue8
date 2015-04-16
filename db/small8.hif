@@ -689,6 +689,8 @@ internalArch_s8:U_inArch|regWidth_s8:JUMP_L
 internalArch_s8:U_inArch|regWidth_s8:EXT
 regWidth_s8:U_OUT0
 regWidth_s8:U_OUT1
+regWidth_s8:MY_LD1
+regWidth_s8:MY_LD0
 regWidth_s8:U_IN0
 regWidth_s8:U_IN1
 }
@@ -1897,73 +1899,6 @@ address_a0
 
 # end
 # entity
-ctrl_s8
-# storage
-db|small8.(15).cnf
-db|small8.(15).cnf
-# logic_option {
-AUTO_RAM_RECOGNITION
-ON
-}
-# case_insensitive
-# source_file
-ctrl_s8.vhd
-a57b7155f817bb25ef2a7932179a7c7
-5
-# internal_option {
-HDL_INITIAL_FANOUT_LIMIT
-OFF
-AUTO_RESOURCE_SHARING
-OFF
-AUTO_RAM_RECOGNITION
-ON
-AUTO_ROM_RECOGNITION
-ON
-}
-# user_parameter {
- constraint(ir)
-7 downto 0
-PARAMETER_STRING
-USR
- constraint(alusel)
-3 downto 0
-PARAMETER_STRING
-USR
- constraint(addrsel)
-1 downto 0
-PARAMETER_STRING
-USR
- constraint(bufferspecialsel)
-1 downto 0
-PARAMETER_STRING
-USR
- constraint(buffernumsel)
-1 downto 0
-PARAMETER_STRING
-USR
- constraint(pc_h_sel)
-1 downto 0
-PARAMETER_STRING
-USR
- constraint(pc_l_sel)
-1 downto 0
-PARAMETER_STRING
-USR
- constraint(writeenable)
-15 downto 0
-PARAMETER_STRING
-USR
-}
-# hierarchies {
-ctrl_s8:U_CTRL
-}
-# lmf
-c:|altera|91|quartus|lmf|maxplus2.lmf
-a36c8ec425c8a2589af98b2d4daabc3
-# macro_sequence
-
-# end
-# entity
 ram
 # storage
 db|small8.(16).cnf
@@ -2409,69 +2344,6 @@ ram:U_RAM|altsyncram:altsyncram_component|altsyncram_p6o1:auto_generated
 
 # end
 # entity
-top_level_s8
-# storage
-db|small8.(0).cnf
-db|small8.(0).cnf
-# logic_option {
-AUTO_RAM_RECOGNITION
-ON
-}
-# case_insensitive
-# source_file
-top_level_s8.vhd
-141ef8d86e82c248435019c7a3292073
-5
-# internal_option {
-HDL_INITIAL_FANOUT_LIMIT
-OFF
-AUTO_RESOURCE_SHARING
-OFF
-AUTO_RAM_RECOGNITION
-ON
-AUTO_ROM_RECOGNITION
-ON
-}
-# include_file {
-reg_s8.vhd
-2b5361779df572a6db05d8eb42ef581
-mux4x1.vhd
-7b7e2d705b51d411590a4a9b11c1b1
-mux2x1.vhd
-cd46833666844ba92a57154c69a4b473
-internalarch_s8.vhd
-c264529bb06156e82dccb38d27577e
-inc_decblk.vhd
-d6eb2b2a4fd3b31a9d9b757d3486af51
-decoder_s8.vhd
-70f2fe9342b54aa7c06fb9838e106a8f
-externalarch_s8.vhd
-c19070db6e7e618553215fd6d16ab28
-alu_s8.vhd
-21913023fff2b2baec4e7ae328da8681
-regwidth_s8.vhd
-163d212c1725a6559f1a88ecf91d4d4
-bus_16source.vhd
-ceeed04d957bec9b9d474ac5513b1d2
-ctrl_s8.vhd
-a57b7155f817bb25ef2a7932179a7c7
-tristate.vhd
-2ba64493d1d55d8e61a0724c489670b3
-reg.vhd
-8982fd9b2d62bdd2b5a3e22da8881acd
-ram.vhd
-7bd26b907738116b1191232cb2dd5
-}
-# hierarchies {
-|
-}
-# lmf
-c:|altera|91|quartus|lmf|maxplus2.lmf
-a36c8ec425c8a2589af98b2d4daabc3
-# macro_sequence
-
-# end
-# entity
 internalArch_s8
 # storage
 db|small8.(1).cnf
@@ -2546,24 +2418,24 @@ PARAMETER_STRING
 USR
 }
 # include_file {
+alu_s8.vhd
+2ea3e584108effca29eac7d8f7d6dd57
+inc_decblk.vhd
+d6eb2b2a4fd3b31a9d9b757d3486af51
+bus_16source.vhd
+ceeed04d957bec9b9d474ac5513b1d2
 reg_s8.vhd
 2b5361779df572a6db05d8eb42ef581
 mux4x1.vhd
 7b7e2d705b51d411590a4a9b11c1b1
-mux2x1.vhd
-cd46833666844ba92a57154c69a4b473
-inc_decblk.vhd
-d6eb2b2a4fd3b31a9d9b757d3486af51
-alu_s8.vhd
-21913023fff2b2baec4e7ae328da8681
-regwidth_s8.vhd
-163d212c1725a6559f1a88ecf91d4d4
-bus_16source.vhd
-ceeed04d957bec9b9d474ac5513b1d2
-tristate.vhd
-2ba64493d1d55d8e61a0724c489670b3
 reg.vhd
 8982fd9b2d62bdd2b5a3e22da8881acd
+mux2x1.vhd
+cd46833666844ba92a57154c69a4b473
+regwidth_s8.vhd
+163d212c1725a6559f1a88ecf91d4d4
+tristate.vhd
+2ba64493d1d55d8e61a0724c489670b3
 }
 # hierarchies {
 internalArch_s8:U_inArch
@@ -2586,7 +2458,7 @@ ON
 # case_insensitive
 # source_file
 alu_s8.vhd
-21913023fff2b2baec4e7ae328da8681
+2ea3e584108effca29eac7d8f7d6dd57
 5
 # internal_option {
 HDL_INITIAL_FANOUT_LIMIT
@@ -2622,6 +2494,136 @@ USR
 }
 # hierarchies {
 internalArch_s8:U_inArch|alu_s8:U_ALU
+}
+# lmf
+c:|altera|91|quartus|lmf|maxplus2.lmf
+a36c8ec425c8a2589af98b2d4daabc3
+# macro_sequence
+
+# end
+# entity
+top_level_s8
+# storage
+db|small8.(0).cnf
+db|small8.(0).cnf
+# logic_option {
+AUTO_RAM_RECOGNITION
+ON
+}
+# case_insensitive
+# source_file
+top_level_s8.vhd
+8324da32bfe5c57d2ec744efd2e9f19f
+5
+# internal_option {
+HDL_INITIAL_FANOUT_LIMIT
+OFF
+AUTO_RESOURCE_SHARING
+OFF
+AUTO_RAM_RECOGNITION
+ON
+AUTO_ROM_RECOGNITION
+ON
+}
+# include_file {
+ctrl_s8.vhd
+20a844f5d68f11ef856ece1672bf86f
+alu_s8.vhd
+2ea3e584108effca29eac7d8f7d6dd57
+inc_decblk.vhd
+d6eb2b2a4fd3b31a9d9b757d3486af51
+externalarch_s8.vhd
+c19070db6e7e618553215fd6d16ab28
+bus_16source.vhd
+ceeed04d957bec9b9d474ac5513b1d2
+tristate.vhd
+2ba64493d1d55d8e61a0724c489670b3
+reg_s8.vhd
+2b5361779df572a6db05d8eb42ef581
+mux4x1.vhd
+7b7e2d705b51d411590a4a9b11c1b1
+mux2x1.vhd
+cd46833666844ba92a57154c69a4b473
+reg.vhd
+8982fd9b2d62bdd2b5a3e22da8881acd
+ram.vhd
+7bd26b907738116b1191232cb2dd5
+internalarch_s8.vhd
+c264529bb06156e82dccb38d27577e
+decoder_s8.vhd
+70f2fe9342b54aa7c06fb9838e106a8f
+regwidth_s8.vhd
+163d212c1725a6559f1a88ecf91d4d4
+}
+# hierarchies {
+|
+}
+# lmf
+c:|altera|91|quartus|lmf|maxplus2.lmf
+a36c8ec425c8a2589af98b2d4daabc3
+# macro_sequence
+
+# end
+# entity
+ctrl_s8
+# storage
+db|small8.(15).cnf
+db|small8.(15).cnf
+# logic_option {
+AUTO_RAM_RECOGNITION
+ON
+}
+# case_insensitive
+# source_file
+ctrl_s8.vhd
+20a844f5d68f11ef856ece1672bf86f
+5
+# internal_option {
+HDL_INITIAL_FANOUT_LIMIT
+OFF
+AUTO_RESOURCE_SHARING
+OFF
+AUTO_RAM_RECOGNITION
+ON
+AUTO_ROM_RECOGNITION
+ON
+}
+# user_parameter {
+ constraint(ir)
+7 downto 0
+PARAMETER_STRING
+USR
+ constraint(alusel)
+3 downto 0
+PARAMETER_STRING
+USR
+ constraint(addrsel)
+1 downto 0
+PARAMETER_STRING
+USR
+ constraint(bufferspecialsel)
+1 downto 0
+PARAMETER_STRING
+USR
+ constraint(buffernumsel)
+1 downto 0
+PARAMETER_STRING
+USR
+ constraint(pc_h_sel)
+1 downto 0
+PARAMETER_STRING
+USR
+ constraint(pc_l_sel)
+1 downto 0
+PARAMETER_STRING
+USR
+ constraint(writeenable)
+15 downto 0
+PARAMETER_STRING
+USR
+}
+# hierarchies {
+ctrl_s8:U_CTRL
 }
 # lmf
 c:|altera|91|quartus|lmf|maxplus2.lmf

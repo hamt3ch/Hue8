@@ -45,6 +45,7 @@ library ieee;
     	c_flag <= '0';
     	s_flag <= '0';
     	z_flag <= '0';
+    	output_us <= (others => '0');
     	
 			case sel is
     --////////Operations/////////////////////////////////////////////

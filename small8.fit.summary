@@ -1,15 +1,15 @@
-Fitter Status : Successful - Wed Apr 15 19:14:47 2015
+Fitter Status : Successful - Thu Apr 16 02:47:44 2015
 Quartus II Version : 9.1 Build 222 10/21/2009 SJ Web Edition
 Revision Name : small8
 Top-level Entity Name : top_level_s8
 Family : Cyclone III
 Device : EP3C16F484C6
 Timing Models : Final
-Total logic elements : 591 / 15,408 ( 4 % )
-    Total combinational functions : 584 / 15,408 ( 4 % )
-    Dedicated logic registers : 245 / 15,408 ( 2 % )
-Total registers : 245
-Total pins : 46 / 347 ( 13 % )
+Total logic elements : 585 / 15,408 ( 4 % )
+    Total combinational functions : 559 / 15,408 ( 4 % )
+    Dedicated logic registers : 260 / 15,408 ( 2 % )
+Total registers : 260
+Total pins : 56 / 347 ( 16 % )
 Total virtual pins : 0
 Total memory bits : 2,048 / 516,096 ( < 1 % )
 Embedded Multiplier 9-bit elements : 0 / 112 ( 0 % )
