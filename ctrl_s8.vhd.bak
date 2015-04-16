@@ -9,7 +9,7 @@ entity ctrl_s8 is
     --////stateInputs//////////////////////////////////////////
     clk : in std_logic;
     rst : in std_logic;
-
+	go : in std_logic;
     --///inputsController/////////////////////////////////////
     IR     : in std_logic_vector(7 downto 0);
     c_flag, v_flag, s_flag, z_flag : in std_logic;
@@ -91,27 +91,26 @@ begin
         --/////////sequentialLogic///////////////////////////////
                  elsif (rising_edge(clk)) then
                  	state <= next_state; -- move to next state
-                 --	save <= 
                  end if;
   end process;
 
 
-  process(state,save,IR,c_flag,v_flag,z_flag,s_flag) 
+  process(state,save,IR,c_flag,v_flag,z_flag,s_flag,go) 
   begin
+
+  		next_state <= state;
   	
-  	next_state <= state;
-  	save <= empty;
   		-- make sure reset is 0
   		global_rst <= '0';
   		
     	--Set enables to 0
     
     	--Set Mux to X
-    	aluSel <=  "----";
+    	aluSel <=  "01";
      	bufferSpecialSel <= "00"; -- set to 0
      	bufferNumSel <= "00"; -- warning signal
      	inc_notDec <= '1'; -- always set for reg++
-    	addrSel <= "01";
+    	--addrSel <= "01";
     	-- internal >> SpecialRegisters
     	
     	SP_h_sel <= '0';
@@ -147,14 +146,17 @@ begin
       	JMP_h_en <= '0';
       	external_en <= '0';
       	externalWrite <= '0';
+
       	-- no connections to the dataBus >> write a 0 to the bus
-      	--writeEnable <= x"4000"; 
+      	writeEnable <= "----------------"; 
   	
 	case state is
 	
 		when Reset =>
+			if(go = '1') then
 			next_state <= initialize; -- Move to next state
-			
+			end if;
+        
         when initialize =>
         	global_rst <= '1'; -- reset all regs
             writeEnable <= x"4000"; -- give internal bus >> 0
@@ -290,9 +292,22 @@ begin
 		--////LDAI////////////////////////////////////////////////
 		when LDAI0 =>
 			writeEnable <= x"0800"; -- External to Internal
-			save <= LDAI1; --save next state
 			
-			next_state <= inc1; --PC
+			bufferSpecialSel <= "01"; --- set buffer >> PC
+			bufferNumSel <= "01";  --set Num >> 0x1
+			inc_notDec <= '1'; -- buffer++
+			
+			PC_l_sel <= "01"; -- load buffer into PC
+			PC_h_sel <= "01";
+			
+			PC_l_en <= '1'; -- enable PC
+			PC_h_en <= '1'; 
+			
+			next_state <= LDAI1;
+				
+			--save <= LDAI1; --save next state
+			
+			--next_state <= inc1; --PC
 		
 		when LDAI1 =>
 			next_state <= LDAI2; -- Wait state
@@ -304,15 +319,35 @@ begin
 		
 		when LDAI3 =>
 			A_en <= '1'; -- latch data 	
-			save <= op_fetch_init; --save next state
 			
-			next_state <= inc1; --PC
+			--save <= LDAI4; --save next state
+			
+			--next_state <= inc1; --PC
+			
+		when LDAI4 => 
+			Z_en <= '1';
+		    S_en <= '1';
+		    
+		    next_state <= inc1;
 		
 		--////LDXI////////////////////////////////////////////////
 		when LDXI0 =>	
 			writeEnable <= x"0800"; -- External to Internal
-			save <= LDXI1; --save next state
-			next_state <= inc1; --PC
+			
+			bufferSpecialSel <= "01"; --- set buffer >> PC
+			bufferNumSel <= "01";  --set Num >> 0x1
+			inc_notDec <= '1'; -- buffer++
+			
+			PC_l_sel <= "01"; -- load buffer into PC
+			PC_h_sel <= "01";
+			
+			PC_l_en <= '1'; -- enable PC
+			PC_h_en <= '1';
+			
+			next_state <= LDXI1; 		
+			
+			--save <= LDXI1; --save next state
+			--next_state <= inc1; --PC
 			
 		when LDXI1 =>
 			next_state <= LDXI2; -- Wait state
@@ -323,12 +358,24 @@ begin
 			next_state <= LDXI3; -- wait state
 			
 		when LDXI3 =>
-			X_l_en <= '1'; -- latch dataLow to reg		
-			save <= LDXI4; --save next state
+			X_l_en <= '1'; -- latch dataLow to reg	
 			
-			next_state <= inc1; --PC
+			next_state <= LDXI4;	
+					
+			--save <= LDXI4; --save next state	
+			--next_state <= inc1; --PC
 			
 		when LDXI4 =>
+			bufferSpecialSel <= "01"; --- set buffer >> PC
+			bufferNumSel <= "01";  --set Num >> 0x1
+			inc_notDec <= '1'; -- buffer++
+			
+			PC_l_sel <= "01"; -- load buffer into PC
+			PC_h_sel <= "01";
+			
+			PC_l_en <= '1'; -- enable PC
+			PC_h_en <= '1'; 
+				
 			next_state <= LDXI5; -- wait state
 			
 		when LDXI5 =>
@@ -342,18 +389,29 @@ begin
 			next_state <= LDXI7;
 			
 		when LDXI7 =>
-		--	addrSel <= "00"; -- AR >> addrBus 
-												
+									
 			save <= op_fetch_init; --save next state
-
+			
 			next_state <= inc1; -- PC++
 		
 		
 		--///////LDSI///////////////////////////////////////////////
 		when LDSI0 =>	
 			writeEnable <= x"0800"; -- External to Internal
-			save <= LDSI1; --save next state
-			next_state <= inc1; --PC
+			
+			bufferSpecialSel <= "01"; --- set buffer >> PC
+			bufferNumSel <= "01";  --set Num >> 0x1
+			inc_notDec <= '1'; -- buffer++
+			
+			PC_l_sel <= "01"; -- load buffer into PC
+			PC_h_sel <= "01";
+			
+			PC_l_en <= '1'; -- enable PC
+			PC_h_en <= '1'; 
+				
+			next_state <= LDSI1;
+--			save <= LDSI1; --save next state
+--			next_state <= inc1; --PC
 			
 		when LDSI1 =>
 			next_state <= LDSI2; -- Wait state
@@ -385,12 +443,10 @@ begin
 		when LDSI7 =>
 		--	addrSel <= "00"; -- AR >> addrBus 
 												
-		    save <= op_fetch_init; --save next state
+		   -- save <= op_fetch_init; --save next state
 
 	   		next_state <= inc1; -- PC++
-		
-		
-		
+			
 		--//////LDAA 0,X////////////////////////////////////////
 		when LDAA0_X =>
 			addrSel <= "10"; -- X >> addrBus         
@@ -398,11 +454,13 @@ begin
 			next_state <= LDAA1_X; -- PC++
 			
 		when LDAA1_X =>
+			addrSel <= "10"; -- X >> addrBus 
 			external_en <= '1'; -- external >> internal
 															--TODO: check LDAA 0,X
 			next_state <= LDAA2_X;
 			
 		when LDAA2_X =>
+			addrSel <= "10"; -- X >> addrBus 
 			A_en <= '1'; -- internal >> A
 			
 			next_state <= LDAA3_X;
@@ -411,16 +469,29 @@ begin
 			z_en <= '1'; -- enable flags
 			s_en <= '1';
 			
-			save <= op_fetch_init; -- look for next op
+			next_state <= inc1;
 			
-			next_state <= inc1; -- PC++
-					
+--			save <= op_fetch_init; -- look for next op
+--			
+--			next_state <= inc1; -- PC++
+--					
 	
 		--///LDAA<address>/////////////////////////////////////	  
 		when LDAA0 =>	
 			writeEnable <= x"0800"; -- External to Internal
-			save <= LDAA1; --save next state
-			next_state <= inc1; --PC
+			
+			BufferSpecialSel <= "01"; --- set buffer >> PC
+			bufferNumSel <= "01";  --set Num >> 0x1
+			inc_notDec <= '1'; -- buffer++
+			
+			PC_l_sel <= "01"; -- load buffer into PC
+			PC_h_sel <= "01";
+			
+			PC_l_en <= '1'; -- enable PC
+			PC_h_en <= '1'; 	
+			
+--			save <= LDAA1; --save next state
+--			next_state <= inc1; --PC
 			
 		when LDAA1 =>
 			next_state <= LDAA2; -- Wait state
@@ -452,9 +523,21 @@ begin
 		when LDAA7 =>
 			addrSel <= "00"; -- AR >> addrBus
 			
-			save <= LDAA8; --save next state
-
-			next_state <= inc1; -- PC++
+			BufferSpecialSel <= "01"; --- set buffer >> PC
+			bufferNumSel <= "01";  --set Num >> 0x1
+			inc_notDec <= '1'; -- buffer++
+			
+			PC_l_sel <= "01"; -- load buffer into PC
+			PC_h_sel <= "01";
+			
+			PC_l_en <= '1'; -- enable PC
+			PC_h_en <= '1'; 
+			
+			next_state <= LDAA8;
+			
+--			save <= LDAA8; --save next state
+--
+--			next_state <= inc1; -- PC++
 			
 		when LDAA8 =>
 			external_en <= '1'; -- external >> internal
@@ -476,8 +559,18 @@ begin
 		when STAA0 => 	
 			writeEnable <= x"0800"; -- External to Internal
 			
-			save <= STAA1; --save next state		
-			next_state <= inc1; --PC
+			BufferSpecialSel <= "01"; --- set buffer >> PC
+			bufferNumSel <= "01";  --set Num >> 0x1
+			inc_notDec <= '1'; -- buffer++
+			
+			PC_l_sel <= "01"; -- load buffer into PC
+			PC_h_sel <= "01";
+			
+			PC_l_en <= '1'; -- enable PC
+			PC_h_en <= '1'; 
+					
+--			save <= STAA1; --save next state		
+--			next_state <= inc1; --PC
 			
 		when STAA1 =>
 			next_state <= STAA2; -- Wait state
@@ -515,9 +608,12 @@ begin
 			
 		when STAA8 =>
 			externalWrite <= '1'; -- internal >> external
-			save <= op_fetch_init;
 			
 			next_state <= inc1;
+			
+--			save <= op_fetch_init;
+--			
+--			next_state <= inc1;
 			
 
 		--/////STARD(MOVA->D)////////////////////////////////
@@ -525,18 +621,22 @@ begin
 			d_sel <= '1'; --select A >> D
 			d_en <= '1'; -- enable D registers
 			
-			save <= op_fetch_init; -- save next state
-			
 			next_state <= inc1;
+			
+--			save <= op_fetch_init; -- save next state
+--			
+--			next_state <= inc1;
 			
 		--/////STDRA(MOVD->A)////////////////////////////////
 		when MOVDA0 =>
 			a_sel <= '1'; --select A >> D
 			a_en <= '1'; -- enable D registers
 			
-			save <= op_fetch_init; -- save next state
-			
 			next_state <= inc1;
+			
+--			save <= op_fetch_init; -- save next state
+--			
+--			next_state <= inc1;
 			
 		---///ADD with Carry///////////////////////////
 		when ADCR0 =>
@@ -555,15 +655,17 @@ begin
 			writeEnable <= x"0004"; -- ALU >> internal
 			a_en <= '1'; -- internal >> A
 			
-			save <= op_fetch_init; -- save next state before PC++
-		
-			next_state <= inc1; -- PC++
+			next_state <= inc1;
 			
+--			save <= op_fetch_init; -- save next state before PC++
+--		
+--			next_state <= inc1; -- PC++
+--			
 			
 		--////AND///////////////////////////////////////	
 		when AND0 =>
 			alu_input_sel <= '1'; -- set D_out as input to ALU
-			aluSel <= x"3"; -- select AND function
+			aluSel <= x"2"; -- select AND function
 			alu_reg_en <= '1'; --enable alu reg
 			
 			z_en <= '1';
@@ -577,9 +679,11 @@ begin
 			writeEnable <= x"0004"; -- ALU >> internal
 			a_en <= '1'; -- internal >> A
 			
-			save <= op_fetch_init; -- save next state before PC++
-		
-			next_state <= inc1; -- PC++
+			next_state <= inc1;
+			
+--			save <= op_fetch_init; -- save next state before PC++
+--		
+--			next_state <= inc1; -- PC++
 			
 		
 		--//////OR/////////////////////////////////////////////
@@ -594,13 +698,15 @@ begin
 			writeEnable <= x"0004"; -- ALU >> internal
 			a_en <= '1'; -- internal >> A
 			
-			save <= op_fetch_init; -- save next state before PC++
-		
-			next_state <= inc1; -- PC++
+			next_state <= inc1;
+			
+--			save <= op_fetch_init; -- save next state before PC++
+--		
+--			next_state <= inc1; -- PC++
 			
 		--//////rotateLeft w/Carry/////////////////////////
 		when ROLC0 =>	
-			aluSel <= x"9"; -- select ROL
+			aluSel <= x"8"; -- select ROL
 			alu_reg_en <= '1'; --enable alu reg
 			
 			z_en <= '1'; -- update flags
@@ -613,33 +719,44 @@ begin
 			writeEnable <= x"0004"; -- ALU >> internal
 			a_en <= '1'; -- internal >> A
 			
-			save <= op_fetch_init; -- save next state before PC++
-		
-			next_state <= inc1; -- PC++	
-		
+			next_state <= inc1;
+			
+--			save <= op_fetch_init; -- save next state before PC++
+--		
+--			next_state <= inc1; -- PC++	
+--		
 		--//////rotateLeft w/Carry/////////////////////////
 		when RORC0 =>	
-			aluSel <= x"8"; -- select ROR
-			alu_reg_en <= '1'; --enable alu reg
+		--	aluSel <= x"7"; -- select ROR
 			
+			next_state <= RORC1;
+			
+		when RORC1	=>
+			alu_reg_en <= '1'; --enable alu reg
+		
 			z_en <= '1'; -- update flags
   			c_en <= '1';
   			s_en <= '1';
+  			
+  			aluSel <= x"7"; -- select ROR
 			
-			next_state <= ROLC1;
+			next_state <= RORC2;
 		
-		when RORC1 =>
+		when RORC2 =>
+			aluSel <= x"7"; -- select ROR
 			writeEnable <= x"0004"; -- ALU >> internal
 			a_en <= '1'; -- internal >> A
 			
-			save <= op_fetch_init; -- save next state before PC++
-		
-			next_state <= inc1; -- PC++	
+			next_state <= inc1;
+			
+--			save <= op_fetch_init; -- save next state before PC++
+--		
+--			next_state <= inc1; -- PC++	
 			
 			
 		--////A--/////////////////////////////////////////////////////
 		when DECA0 =>
-			aluSel <= x"A"; -- select ROL
+			aluSel <= x"9"; -- select ROL
 			alu_reg_en <= '1'; --enable alu reg
 			
 			z_en <= '1'; -- update flags
@@ -651,9 +768,11 @@ begin
 			writeEnable <= x"0004"; -- ALU >> internal
 			a_en <= '1'; -- internal >> A
 			
-			save <= op_fetch_init; -- save next state before PC++
-		
-			next_state <= inc1; -- PC++	
+			next_state <= inc1;
+			
+--			save <= op_fetch_init; -- save next state before PC++
+--		
+--			next_state <= inc1; -- PC++	
 	
 
 		--//////clearCarryFlag/////////////////////////////////////////
@@ -665,9 +784,11 @@ begin
 			
 		when CLRC1 =>
 			
-			save <= op_fetch_init; -- back to the top
+			next_state <= inc1;
 			
-			next_state <= inc1; -- PC++
+--			save <= op_fetch_init; -- back to the top
+--			
+--			next_state <= inc1; -- PC++
 		--////////setCarryFlag///////////////////////////////////////
 		when SETC0 =>
 			c_en <= '1'; -- enable c_reg		TODO:remember to set flags according to the instruction given
@@ -677,9 +798,11 @@ begin
 			
 		when SETC1 =>
 			
-			save <= op_fetch_init; -- back to the top
+			next_state <= inc1;
 			
-			next_state <= inc1; -- PC++
+--			save <= op_fetch_init; -- back to the top
+--			
+--			next_state <= inc1; -- PC++
 		
 		--/////X++//////////////////////////////////////////////////
 		when INCX =>
@@ -694,7 +817,7 @@ begin
 			X_l_en <= '1'; -- enable X
 			X_h_en <= '1'; 
 			
-			save <= op_fetch_init;
+--			save <= op_fetch_init;
 			
 			next_state <= inc1;
 			
@@ -711,8 +834,8 @@ begin
 			X_l_en <= '1'; -- enable X
 			X_h_en <= '1'; 
 			
-			
-			save <= op_fetch_init;
+--			
+--			save <= op_fetch_init;
 			
 			next_state <= inc1;
 			
@@ -816,9 +939,21 @@ begin
 		when RET4 => 
 			PC_l_en <= '1';
 			
-			save <= RET5;
+			bufferSpecialSel <= "11"; --- set buffer >> SP
+     		bufferNumSel <= "01";  --set Num >> 0x1
+			inc_notDec <= '0'; -- buffer--
 			
-			next_state <= sp_inc;
+			SP_l_sel <= '1'; -- load buffer into SP
+			SP_h_sel <= '1';
+			
+			SP_l_en <= '1'; -- enable SP
+			SP_h_en <= '1';
+			
+			next_state <= RET5;
+			
+--			save <= RET5;
+--			
+--			next_state <= sp_inc;
 			
 		when RET5 =>
 			external_en <= '1'; --push data to internal
@@ -834,16 +969,14 @@ begin
 			PC_h_en <= '1';
 			
 			next_state <= op_fetch_init;
-			
-			
-			
+				
 		---//////////Branch on xflag/////////////////////////////////
 		when Branch =>
 			if(IR(3 downto 0) = "0000" and c_flag = '0') or (IR(3 downto 0) = "0010" and z_flag = '1') or (IR(3 downto 0) = "0100" and Z_flag = '0') or (IR(3 downto 0) = "0101" and s_flag = '0') then
 				next_state <= takeBranch0;
 												--TODO: Write all branch cases and make sure they work						
 			else
-				save <= op_fetch_init;
+			--	save <= op_fetch_init;
 				
 				next_state <= inc3; 
 				end if;
@@ -928,7 +1061,7 @@ begin
 			PC_l_en <= '1'; -- enable PC
 			PC_h_en <= '1'; 
 				
-			next_state <= save;
+			next_state <= op_fetch_init;
 			
 	   when inc2 => 
 	   		bufferSpecialSel <= "01"; --- set buffer >> PC

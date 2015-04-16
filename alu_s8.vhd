@@ -33,7 +33,7 @@ library ieee;
       a_us <= unsigned(a); 
       d_us <= unsigned(d);
 		
-    process(sel,a_us,d_us,output_us,cin)        -- TODO: change how you update the flag 
+    process(sel,a_us,d_us,cin)        -- TODO: change how you update the flag 
 
     	variable temp: unsigned(WIDTH downto 0);
 		variable logicTemp : unsigned(width-1 downto 0);
@@ -45,6 +45,7 @@ library ieee;
     	c_flag <= '0';
     	s_flag <= '0';
     	z_flag <= '0';
+    	output_us <= (others => '0');
     	
 			case sel is
     --////////Operations/////////////////////////////////////////////
@@ -167,7 +168,7 @@ library ieee;
             when x"7" => -- ROR w/ C
             
             tempLogic := cin&a_us(width-1 downto 1);
-            c_flag <= a_us(width-1);
+            c_flag <= a_us(0);
             s_flag <= tempLogic(width-2);
          
             if to_integer(tempLogic) = 0 then
@@ -190,13 +191,13 @@ library ieee;
       		
             when x"9" => -- A--;
             tempLogic := a_us - 1;
-           
-           	s_flag <= tempLogic(width-1);
+          
+          	s_flag <= tempLogic(width-1);
            
             if to_integer(tempLogic) = 0 then
           		z_flag <= '1';
           	 end if;
-           	
+          
            	output_us <= tempLogic;
            
             when x"A" => -- A++;
@@ -215,22 +216,21 @@ library ieee;
         	
         	when x"C" => -- Set c_flag	
         	c_flag <= '1';
+        	
+        	when X"F" =>
+     	
+        	tempLogic := a_us;
+        	
+        	if(tempLogic = "00000000") then
+        		z_flag <= '1';
+        	elsif(tempLogic(width-1) = '1') then
+        		s_flag <= '1';
+        	end if;
+      
 	
             when others => null;
         end case;
         
-         --////setFlags//////////////////
-        if output_us = 0 or a_us = 0 then
-          z_flag <= '1';
-        else
-         z_flag <= '0';
-        end if;
-
-        if output_us(7) = '1' or a_us(7) = '1' then
-          s_flag <= '1';
-        else
-          s_flag <= '0';
-      end if;
       
     end process;   
 

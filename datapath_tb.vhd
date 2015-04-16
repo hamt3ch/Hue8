@@ -10,6 +10,7 @@ architecture TB of datapath_tb is
 
 --Internal
     --////SyncSignals////////////////////////
+    signal    go : std_logic := '1';
     signal    clk :  std_logic := '0';
     signal    rst :  std_logic;
     signal    global_rst : std_logic;
@@ -127,6 +128,7 @@ begin --instantiate blocks
     U_CTRL: entity work.ctrl_s8
     	port map(clk              => clk,
     		     rst              => rst,
+    		     go 			=> go, 
     		     IR               => IR_out,
     		     c_flag           => c_flag,
     		     v_flag           => v_flag,
@@ -256,8 +258,8 @@ begin --instantiate blocks
     wait for 50 ns;    
     rst <= '0';  --Ctrl Takes over
     
-    input1 <= x"05";
-    input0 <= x"0A";
+    input1 <= x"1F";
+    input0 <= x"30";
     
 --    wait for 200 ns;
 --    
