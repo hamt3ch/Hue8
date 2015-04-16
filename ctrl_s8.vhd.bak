@@ -98,20 +98,22 @@ begin
 
   process(state,save,IR,c_flag,v_flag,z_flag,s_flag) 
   begin
-  	
+
   	next_state <= state;
-  	save <= empty;
+  	
+  	--save <= empty;
+  	
   		-- make sure reset is 0
   		global_rst <= '0';
   		
     	--Set enables to 0
     
     	--Set Mux to X
-    	aluSel <=  "----";
+    	aluSel <=  x"F";
      	bufferSpecialSel <= "00"; -- set to 0
      	bufferNumSel <= "00"; -- warning signal
      	inc_notDec <= '1'; -- always set for reg++
-    	addrSel <= "01";
+    	--addrSel <= "01";
     	-- internal >> SpecialRegisters
     	
     	SP_h_sel <= '0';
@@ -125,10 +127,10 @@ begin
      	alu_input_sel <= '0';
   
   		-- internal != Registers
-  		z_en <= '0';
-  		c_en <= '0';
-  		v_en <= '0';
-  		s_en <= '0';
+  		z_en <= '1';
+  		c_en <= '1';
+  		v_en <= '1';
+  		s_en <= '1';
       	ALU_reg_en <= '0';
       	A_en <= '0';
       	D_en <= '0';
@@ -147,8 +149,9 @@ begin
       	JMP_h_en <= '0';
       	external_en <= '0';
       	externalWrite <= '0';
+
       	-- no connections to the dataBus >> write a 0 to the bus
-      	--writeEnable <= x"4000"; 
+    --  	writeEnable <= x"0800"; 
   	
 	case state is
 	
@@ -304,9 +307,16 @@ begin
 		
 		when LDAI3 =>
 			A_en <= '1'; -- latch data 	
-			save <= op_fetch_init; --save next state
+			
+			save <= LDAI4; --save next state
 			
 			next_state <= inc1; --PC
+			
+		when LDAI4 => 
+			Z_en <= '1';
+		    S_en <= '1';
+		    
+		    next_state <= op_fetch_init;
 		
 		--////LDXI////////////////////////////////////////////////
 		when LDXI0 =>	
@@ -563,7 +573,7 @@ begin
 		--////AND///////////////////////////////////////	
 		when AND0 =>
 			alu_input_sel <= '1'; -- set D_out as input to ALU
-			aluSel <= x"3"; -- select AND function
+			aluSel <= x"2"; -- select AND function
 			alu_reg_en <= '1'; --enable alu reg
 			
 			z_en <= '1';
@@ -600,7 +610,7 @@ begin
 			
 		--//////rotateLeft w/Carry/////////////////////////
 		when ROLC0 =>	
-			aluSel <= x"9"; -- select ROL
+			aluSel <= x"8"; -- select ROL
 			alu_reg_en <= '1'; --enable alu reg
 			
 			z_en <= '1'; -- update flags
@@ -619,16 +629,22 @@ begin
 		
 		--//////rotateLeft w/Carry/////////////////////////
 		when RORC0 =>	
-			aluSel <= x"8"; -- select ROR
-			alu_reg_en <= '1'; --enable alu reg
-			
+		--	aluSel <= x"7"; -- select ROR
+		
 			z_en <= '1'; -- update flags
   			c_en <= '1';
   			s_en <= '1';
 			
-			next_state <= ROLC1;
+			next_state <= RORC1;
+			
+		when RORC1	=>
+			alu_reg_en <= '1'; --enable alu reg
+			aluSel <= x"7"; -- select ROR
+			
+			next_state <= RORC2;
 		
-		when RORC1 =>
+		when RORC2 =>
+			aluSel <= x"7"; -- select ROR
 			writeEnable <= x"0004"; -- ALU >> internal
 			a_en <= '1'; -- internal >> A
 			
@@ -639,7 +655,7 @@ begin
 			
 		--////A--/////////////////////////////////////////////////////
 		when DECA0 =>
-			aluSel <= x"A"; -- select ROL
+			aluSel <= x"9"; -- select ROL
 			alu_reg_en <= '1'; --enable alu reg
 			
 			z_en <= '1'; -- update flags

@@ -91,7 +91,7 @@ BEGIN
 	GENERIC MAP (
 		clock_enable_input_a => "BYPASS",
 		clock_enable_output_a => "BYPASS",
-		init_file => "//vmware-host/Shared Folders/hmiles23/Downloads/Small8TestPackage/TestCase3.mif",
+		init_file => "//vmware-host/Shared Folders/hmiles23/Downloads/Small8TestPackage/mult.mif",
 		intended_device_family => "Cyclone III",
 		lpm_hint => "ENABLE_RUNTIME_MOD=NO",
 		lpm_type => "altsyncram",

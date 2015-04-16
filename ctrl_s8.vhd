@@ -307,9 +307,16 @@ begin
 		
 		when LDAI3 =>
 			A_en <= '1'; -- latch data 	
-			save <= op_fetch_init; --save next state
+			
+			save <= LDAI4; --save next state
 			
 			next_state <= inc1; --PC
+			
+		when LDAI4 => 
+			Z_en <= '1';
+		    S_en <= '1';
+		    
+		    next_state <= op_fetch_init;
 		
 		--////LDXI////////////////////////////////////////////////
 		when LDXI0 =>	
@@ -623,16 +630,17 @@ begin
 		--//////rotateLeft w/Carry/////////////////////////
 		when RORC0 =>	
 		--	aluSel <= x"7"; -- select ROR
-		
-			z_en <= '1'; -- update flags
-  			c_en <= '1';
-  			s_en <= '1';
 			
 			next_state <= RORC1;
 			
 		when RORC1	=>
 			alu_reg_en <= '1'; --enable alu reg
-			aluSel <= x"7"; -- select ROR
+		
+			z_en <= '1'; -- update flags
+  			c_en <= '1';
+  			s_en <= '1';
+  			
+  			aluSel <= x"7"; -- select ROR
 			
 			next_state <= RORC2;
 		

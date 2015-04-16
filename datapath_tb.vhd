@@ -256,8 +256,8 @@ begin --instantiate blocks
     wait for 50 ns;    
     rst <= '0';  --Ctrl Takes over
     
-    input1 <= x"05";
-    input0 <= x"0A";
+    input1 <= x"1F";
+    input0 <= x"30";
     
 --    wait for 200 ns;
 --    
